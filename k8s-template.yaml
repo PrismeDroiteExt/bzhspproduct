@@ -1,0 +1,140 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: bzhspback
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: product-config
+  namespace: bzhspback
+data:
+  DB_PORT: "5432"
+  DB_SSLMODE: "disable"
+  DB_TIMEZONE: "Europe/Paris"
+  GIN_MODE: "release"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: product-secrets
+  namespace: bzhspback
+type: Opaque
+data:
+  PRODUCT_DB_USER: TW9uU3VwZXJNb3REZVBhc3NlMTIzIQ== #TODO: Mettre ça dans le secret
+  PRODUCT_DB_PASSWORD: cG9zdGdyZXM=
+  PRODUCT_DB_NAME: cHJvZHVjdF9kYg==
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: product-service
+  namespace: bzhspback
+spec:
+  selector:
+    app: product-service
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8081
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-service
+  namespace: bzhspback
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: product-service
+  template:
+    metadata:
+      labels:
+        app: product-service
+    spec:
+      containers:
+      - name: product-service
+        image: product-service:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8081
+        env:
+        - name: PRODUCT_DB_HOST
+          value: product-db-service
+        envFrom:
+        - configMapRef:
+            name: product-config
+        - secretRef:
+            name: product-secrets
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: product-db
+  namespace: bzhspback
+spec:
+  serviceName: product-db-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: product-db
+  template:
+    metadata:
+      labels:
+        app: product-db
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:17
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: product-secrets
+              key: PRODUCT_DB_USER
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: product-secrets
+              key: PRODUCT_DB_PASSWORD
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: product-secrets
+              key: PRODUCT_DB_NAME
+        volumeMounts:
+        - name: product-db-data
+          mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+  - metadata:
+      name: product-db-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: product-db-service
+  namespace: bzhspback
+spec:
+  selector:
+    app: product-db
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+  clusterIP: None

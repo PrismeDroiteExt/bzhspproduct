@@ -2,5 +2,9 @@
 FROM golang:1.23.2-alpine
 # Set the Current Working Directory inside the container
 WORKDIR /app
+COPY . .
 ENV GIN_MODE=release
+RUN go mod download
+RUN go build -o ./cmd/web/main ./cmd/web/main.go 
 EXPOSE 8081
+CMD ["./cmd/web/main"]

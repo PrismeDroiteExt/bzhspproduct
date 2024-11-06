@@ -1,13 +1,11 @@
 services:
-  back:
+  product-service:
     build:
-      context: .
-      dockerfile: ./dockerfiles/Dockerfile-gha
+      context: ./app
+      dockerfile: Dockerfile-gha
     restart: unless-stopped
     ports:
-      - "8080:8080"
-    # volumes:
-    #   - ./app:/app
+      - "8081:8081"
     environment:
       - DB_HOST=${DB_HOST}
       - DB_USER=${DB_USER}
@@ -18,9 +16,9 @@ services:
       - DB_TIMEZONE=${TIMEZONE}
       - GIN_MODE=${GIN_MODE}
     depends_on:
-      - db
-    # entrypoint: "./scripts/dev-entrypoint.sh"
-  db:
+      - db-product
+
+  db-product:
     image: postgres:17
     restart: unless-stopped
     environment:
@@ -28,17 +26,4 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
     volumes:
-      - ./db-data:/var/lib/postgresql/data
-      - ./test.sql:/docker-entrypoint-initdb.d/test.sql
-  cloudbeaver:
-    image: dbeaver/cloudbeaver:latest
-    restart: unless-stopped
-    ports:
-      - "8978:8978"
-    volumes:
-      - ./cloudbeaver/workspace:/opt/cloudbeaver/workspace
-    # environment:
-    #   - CB_ADMIN_NAME=${CB_ADMIN_NAME}
-    #   - CB_ADMIN_PASSWORD=${CB_ADMIN_PASSWORD}
-    depends_on:
-      - db
+      - ./product-db-data:/var/lib/postgresql/data

@@ -1,0 +1,34 @@
+services:
+  product-service:
+    build:
+      context: ./app
+      dockerfile: Dockerfile-local
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./app:/app
+    environment:
+      - PRODUCT_DB_HOST=${PRODUCT_DB_HOST}
+      - PRODUCT_DB_USER=${PRODUCT_DB_USER}
+      - PRODUCT_DB_PASSWORD=${PRODUCT_DB_PASSWORD}
+      - PRODUCT_DB_NAME=${PRODUCT_DB_NAME}
+      - DB_PORT=${DB_PORT}
+      - DB_SSLMODE=${DB_SSLMODE}
+      - DB_TIMEZONE=${TIMEZONE}
+      - GIN_MODE=${GIN_MODE}
+    entrypoint:
+      - ./scripts/dev-entrypoint.sh
+    depends_on:
+      - db-product
+
+  db-product:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: ${PRODUCT_DB_USER}
+      POSTGRES_PASSWORD: ${PRODUCT_DB_PASSWORD}
+      POSTGRES_DB: ${PRODUCT_DB_NAME}
+    volumes:
+      - ./product-db-data:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
+

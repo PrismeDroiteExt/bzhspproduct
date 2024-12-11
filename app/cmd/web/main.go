@@ -2,10 +2,12 @@ package main
 
 import (
 	"log"
+	"os"
 
 	_ "bzhspback.fr/breizhsport/docs" // This is where swag will generate docs
 	"bzhspback.fr/breizhsport/internal/api/v1"
 	"bzhspback.fr/breizhsport/internal/database"
+	"bzhspback.fr/breizhsport/internal/seeders"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -26,12 +28,38 @@ import (
 // @host      localhost:8081
 // @BasePath  /api/v1
 func main() {
-	r := gin.Default()
-
 	// Initialize database
 	if err := database.InitDB(); err != nil {
 		log.Fatalf("Failed to initialize database: %v", err)
 	}
+
+	// Check if the seed command was provided
+	if len(os.Args) > 1 && os.Args[1] == "seed" {
+		log.Println("Starting database seeding...")
+
+		db := database.GetDB()
+
+		// Run seeders in the correct order
+		if err := seeders.SeedBrands(db); err != nil {
+			log.Fatalf("Error seeding brands: %v", err)
+		}
+		log.Println("Brands seeded successfully")
+
+		if err := seeders.SeedCategories(db); err != nil {
+			log.Fatalf("Error seeding categories: %v", err)
+		}
+		log.Println("Categories seeded successfully")
+
+		if err := seeders.SeedProducts(db); err != nil {
+			log.Fatalf("Error seeding products: %v", err)
+		}
+		log.Println("Products seeded successfully")
+
+		log.Println("Database seeding completed successfully")
+		return
+	}
+
+	r := gin.Default()
 
 	// Swagger documentation endpoint
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

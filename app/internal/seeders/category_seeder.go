@@ -10,17 +10,17 @@ func SeedCategories(db *gorm.DB) error {
 		{
 			Name:        "Sneakers",
 			Description: "Athletic and casual footwear for all occasions",
-			PictureUrl:  "https://example.com/categories/sneakers.jpg",
+			PictureUrl:  "/images/categories/sneakers.jpg",
 		},
 		{
 			Name:        "T-Shirts",
 			Description: "Comfortable and stylish t-shirts for everyday wear",
-			PictureUrl:  "https://example.com/categories/tshirts.jpg",
+			PictureUrl:  "/images/categories/tshirts.jpg",
 		},
 		{
 			Name:        "Shorts",
 			Description: "Athletic and casual shorts for sports and leisure",
-			PictureUrl:  "https://example.com/categories/shorts.jpg",
+			PictureUrl:  "/images/categories/shorts.jpg",
 		},
 	}
 

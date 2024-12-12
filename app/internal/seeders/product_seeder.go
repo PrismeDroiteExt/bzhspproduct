@@ -14,7 +14,7 @@ func SeedProducts(db *gorm.DB) error {
 			BrandID:     1, // Nike
 			Price:       149.99,
 			Discount:    nil,
-			Colors:      "Black,White,Red",
+			Colors:      "black,white,red",
 			Sizes:       "40,41,42,43,44,45",
 			PictureUrl:  "/images/products/nike.jpg",
 		},
@@ -24,8 +24,8 @@ func SeedProducts(db *gorm.DB) error {
 			CategoryID:  1, // Sneakers
 			BrandID:     2, // Adidas
 			Price:       179.99,
-			Discount:    newFloat64(20.0),
-			Colors:      "White,Black,Blue",
+			Discount:    newFloat64(159.99),
+			Colors:      "white,black,blue",
 			Sizes:       "39,40,41,42,43,44",
 			PictureUrl:  "/images/products/adidas.jpg",
 		},
@@ -35,8 +35,8 @@ func SeedProducts(db *gorm.DB) error {
 			CategoryID:  1, // Sneakers
 			BrandID:     3, // Puma
 			Price:       129.99,
-			Discount:    newFloat64(15.0),
-			Colors:      "White,Black,Yellow",
+			Discount:    newFloat64(119.99),
+			Colors:      "white,black,yellow",
 			Sizes:       "40,41,42,43,44",
 			PictureUrl:  "/images/products/puma.jpg",
 		},
@@ -47,8 +47,8 @@ func SeedProducts(db *gorm.DB) error {
 			BrandID:     1, // Nike
 			Price:       29.99,
 			Discount:    nil,
-			Colors:      "Black,White,Grey",
-			Sizes:       "S,M,L,XL",
+			Colors:      "black,white,grey",
+			Sizes:       "s,m,l,xl",
 			PictureUrl:  "/images/products/nike-tshirt.jpg",
 		},
 		{
@@ -58,8 +58,8 @@ func SeedProducts(db *gorm.DB) error {
 			BrandID:     2, // Adidas
 			Price:       34.99,
 			Discount:    newFloat64(10.0),
-			Colors:      "Black,Navy,Grey",
-			Sizes:       "S,M,L,XL",
+			Colors:      "black,navy,grey",
+			Sizes:       "s,m,l,xl",
 			PictureUrl:  "/images/products/adidas-shorts.jpg",
 		},
 	}

@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"bzhspback.fr/breizhsport/internal/dto"
 	"bzhspback.fr/breizhsport/internal/services"
 	"github.com/gin-gonic/gin"
 )
@@ -29,9 +30,10 @@ func (cc *CategoryController) GetAllCategories(c *gin.Context) {
 		return
 	}
 
+	response := dto.ToResponseList(categories)
 	c.JSON(http.StatusOK, gin.H{
 		"status": "success",
-		"data":   categories,
+		"data":   response,
 	})
 }
 
@@ -56,8 +58,9 @@ func (cc *CategoryController) GetCategoryByID(c *gin.Context) {
 		return
 	}
 
+	response := dto.ToResponse(category)
 	c.JSON(http.StatusOK, gin.H{
 		"status": "success",
-		"data":   category,
+		"data":   response,
 	})
 }

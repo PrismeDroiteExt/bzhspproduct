@@ -12,10 +12,3 @@ type ProductResponse struct {
 	Category    CategoryResponse `json:"category"`
 	PictureUrl  string           `json:"picture_url"`
 }
-
-// TODO: Delete this struct definition when the Category model is created
-// Add this struct definition
-type CategoryResponse struct {
-	ID   uint   `json:"id"`
-	Name string `json:"name"`
-}

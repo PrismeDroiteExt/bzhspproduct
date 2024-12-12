@@ -17,7 +17,7 @@ func InitRoutes(r *gin.Engine) {
 
 	initBrandRoutes(apiv1, db)
 	initProductRoutes(apiv1, db)
-
+	initCategoryRoutes(apiv1, db)
 }
 
 func initBrandRoutes(router *gin.RouterGroup, db *gorm.DB) {
@@ -32,4 +32,11 @@ func initProductRoutes(router *gin.RouterGroup, db *gorm.DB) {
 	service := services.NewProductService(repo)
 	controller := controllers.NewProductController(service)
 	SetupProductRoutes(router, controller)
+}
+
+func initCategoryRoutes(router *gin.RouterGroup, db *gorm.DB) {
+	repo := repository.NewCategoryRepository(db)
+	service := services.NewCategoryService(repo)
+	controller := controllers.NewCategoryController(service)
+	SetupCategoryRoutes(router, controller)
 }

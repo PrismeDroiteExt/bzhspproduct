@@ -24,7 +24,7 @@ func SeedProducts(db *gorm.DB) error {
 			CategoryID:  1, // Sneakers
 			BrandID:     2, // Adidas
 			Price:       179.99,
-			Discount:    newFloat64(20.0),
+			Discount:    newFloat64(159.99),
 			Colors:      "White,Black,Blue",
 			Sizes:       "39,40,41,42,43,44",
 			PictureUrl:  "/images/products/adidas.jpg",
@@ -35,7 +35,7 @@ func SeedProducts(db *gorm.DB) error {
 			CategoryID:  1, // Sneakers
 			BrandID:     3, // Puma
 			Price:       129.99,
-			Discount:    newFloat64(15.0),
+			Discount:    newFloat64(119.99),
 			Colors:      "White,Black,Yellow",
 			Sizes:       "40,41,42,43,44",
 			PictureUrl:  "/images/products/puma.jpg",

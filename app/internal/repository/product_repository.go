@@ -9,6 +9,14 @@ import (
 	"gorm.io/gorm"
 )
 
+// ProductRepositoryInterface defines the interface for product repository operations
+type ProductRepositoryInterface interface {
+	GetProductByID(id uint) (models.Product, error)
+	GetProductsByCategoryID(categoryID uint, filters []dto.Filter) ([]models.Product, error)
+	GetRecommendedProducts() ([]models.Product, error)
+	GetProductsByNameOrDescription(nameOrDescription string, filters []dto.Filter) ([]models.Product, error)
+}
+
 // ProductRepository struct represents a repository for managing product data.
 type ProductRepository struct {
 	DB *gorm.DB

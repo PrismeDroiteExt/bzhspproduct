@@ -8,11 +8,11 @@ import (
 
 // ProductService struct represents a service for managing product data.
 type ProductService struct {
-	repo *repository.ProductRepository
+	repo repository.ProductRepositoryInterface
 }
 
 // Constructor
-func NewProductService(repo *repository.ProductRepository) *ProductService {
+func NewProductService(repo repository.ProductRepositoryInterface) *ProductService {
 	return &ProductService{repo: repo}
 }
 
